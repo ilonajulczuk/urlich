@@ -22,6 +22,11 @@ type PageController struct {
 	DB pages.PageClient
 }
 
+func CreateRandomKey() string {
+	// TODO(att): look at http://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-golang
+	return "default"
+}
+
 func (c *PageController) ViewHandler(w http.ResponseWriter, r *http.Request) {
 	key := findKey(r.URL.Path)
 	if key == "" {
@@ -51,6 +56,11 @@ func (c *PageController) AddHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(442) // Unprocessable entity.
 		return
+	}
+	// TODO(att): handle the case where key is already taken,
+	// based on either generated or user provided key.
+	if page.Key == "" {
+		page.Key = CreateRandomKey()
 	}
 
 	if err := c.DB.StorePage(page); err != nil {
