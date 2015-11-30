@@ -22,7 +22,7 @@ type PageClient interface {
 type RedisOptions struct {
 	Addr     string
 	Password string
-	DB       int
+	DB       int64
 }
 
 type RedisPageClient struct {
@@ -30,11 +30,10 @@ type RedisPageClient struct {
 }
 
 func NewRedisClient(options *RedisOptions) *RedisPageClient {
-	// TODO(att): use newly passed options.
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Addr:     options.Addr,
+		Password: options.Password,
+		DB:       options.DB,
 	})
 
 	_, err := client.Ping().Result()

@@ -7,7 +7,13 @@ import (
 )
 
 func main() {
-	db := pages.NewRedisClient(&pages.RedisOptions{})
+	redisOptions := &pages.RedisOptions{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	}
+
+	db := pages.NewRedisClient(redisOptions)
 	var pc = &handlers.PageController{db}
 
 	http.HandleFunc("/add", pc.AddHandler)
