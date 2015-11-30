@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
+	http.HandleFunc("/add", handlers.AddHandler)
 	http.HandleFunc("/", handlers.ViewHandler)
-	http.HandleFunc("/add/", handlers.AddHandler)
 	http.ListenAndServe(":9081", nil)
 }
