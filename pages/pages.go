@@ -9,6 +9,8 @@ import (
 
 const PagePrefix = "urlich:pages:"
 
+var PageKeyAlreadyTakenError = errors.New("page key already taken")
+
 type Page struct {
 	Key string `json:"key"`
 	URL string `json:"url"`
@@ -62,9 +64,15 @@ func (r *RedisPageClient) StorePage(page *Page) error {
 	if err != nil {
 		return err
 	}
+	cmd := r.Client.SetNX(PagePrefix+page.Key, serializedPage, 0)
 
-	if err := r.Client.Set(PagePrefix+page.Key, serializedPage, 0).Err(); err != nil {
+	result, err := cmd.Result()
+	if err != nil {
 		return err
+	}
+
+	if !result {
+		return PageKeyAlreadyTakenError
 	}
 	return nil
 }
