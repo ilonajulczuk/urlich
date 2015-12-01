@@ -66,7 +66,7 @@ func (c *PageController) ViewHandler(w http.ResponseWriter, r *http.Request) {
 func (c *PageController) AddHandler(w http.ResponseWriter, r *http.Request) {
 	page, err := parsePage(r.Body)
 	if err != nil {
-		w.WriteHeader(442)
+		w.WriteHeader(422)
 		return
 	}
 
