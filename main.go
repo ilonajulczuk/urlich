@@ -32,5 +32,5 @@ func main() {
 
 	http.HandleFunc("/add", pc.AddHandler)
 	http.HandleFunc("/", pc.ViewHandler)
-	http.ListenAndServe(":9081", nil)
+	http.ListenAndServe(envOrDefault("PORT", ":9081"), nil)
 }
